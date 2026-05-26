@@ -4,6 +4,11 @@ from pathlib import Path
 
 FORM = "https://docs.google.com/forms/d/1a9aEypXsQRid9wPjRVSvWVJv3CboCY_4H8e8zj7e1ss/"
 
+GENERIC_DESCRIPTION = (
+    "Es un conejo rescatado en Tijuana que busca un hogar lleno de amor y cuidado responsable. "
+    "Con paciencia y el ambiente adecuado, se adapta muy bien a su nueva familia."
+)
+
 REQUIREMENTS = """
 <ol class="adoption-requirements-list">
   <li>Estrictamente adopción de conejo para mascota: no venta, no reproducción, no comida.</li>
@@ -19,95 +24,12 @@ REQUIREMENTS = """
 """
 
 RABBITS = [
-    {
-        "slug": "copito",
-        "name": "Copito",
-        "image": "copito.jpg",
-        "age": "2 años",
-        "sex": "Macho",
-        "sterilized": "Castrado",
-        "status": "Listo para adopción",
-        "ready": True,
-        "temperament": "Copito es un conejo tranquilo y muy sociable. Le encanta que lo acaricien detrás de las orejas y se adapta bien a familias que respetan su ritmo.",
-    },
-    {
-        "slug": "canelita",
-        "name": "Canelita",
-        "image": "canelita.jpg",
-        "age": "1.5 años",
-        "sex": "Hembra",
-        "sterilized": "Esterilizada y vacunada",
-        "status": "Listo para adopción",
-        "ready": True,
-        "temperament": "Canelita es curiosa y cariñosa. Disfruta explorar con supervisión y convive bien cuando se le presenta con calma.",
-    },
-    {
-        "slug": "nube",
-        "name": "Nube",
-        "image": "nube-adopt.jpg",
-        "age": "6 meses",
-        "sex": "Hembra",
-        "sterilized": "En proceso de esterilización",
-        "status": "Listo para adopción",
-        "ready": True,
-        "temperament": "Nube es muy juguetona y activa. Necesita espacio para correr y una familia paciente que la ayude a canalizar su energía.",
-    },
-    {
-        "slug": "miel",
-        "name": "Miel",
-        "image": "miel.jpg",
-        "age": "3 meses",
-        "sex": "Hembra",
-        "sterilized": "Aún no esterilizada (edad)",
-        "status": "En evaluación",
-        "ready": False,
-        "temperament": "Miel es dulce y algo tímida. Está aprendiendo a confiar en las personas y progresa con socialización diaria.",
-    },
-    {
-        "slug": "sombra",
-        "name": "Sombra",
-        "image": "sombra.jpg",
-        "age": "1.5 años",
-        "sex": "Macho",
-        "sterilized": "Castrado",
-        "status": "Listo para adopción",
-        "ready": True,
-        "temperament": "Sombra es observador y noble. Prefiere ambientes tranquilos y se deja acariciar cuando ya te conoce.",
-    },
-    {
-        "slug": "pecas",
-        "name": "Pecas",
-        "image": "pecas.jpg",
-        "age": "1 año",
-        "sex": "Macho",
-        "sterilized": "Castrado",
-        "status": "Listo para adopción",
-        "ready": True,
-        "temperament": "Pecas es independiente pero cariñoso a su manera. Le gusta tener su rincón y salir a explorar con libertad.",
-    },
-    {
-        "slug": "pelusa",
-        "name": "Pelusa",
-        "image": "pelusa.jpg",
-        "age": "1 año",
-        "sex": "Hembra",
-        "sterilized": "Esterilizada",
-        "status": "Listo para adopción",
-        "ready": True,
-        "breed": "Enana Holandesa",
-        "temperament": "Pelusa es suave y calmada. Ideal para hogares que buscan un compañero tranquilo y fácil de manejar.",
-    },
-    {
-        "slug": "canelito",
-        "name": "Canelito",
-        "image": "canelito.jpg",
-        "age": "8 meses",
-        "sex": "Macho",
-        "sterilized": "En tratamiento médico",
-        "status": "En tratamiento",
-        "ready": False,
-        "temperament": "Canelito está recuperándose con cuidados del refugio. Pronto estará listo; por ahora solo puede conocerse para lista de espera.",
-    },
+    {"slug": "bobby", "name": "Bobby", "image": "bobby.jpg", "sex": "Macho"},
+    {"slug": "choco", "name": "Choco", "image": "choco.jpg", "sex": "Macho"},
+    {"slug": "dalmita", "name": "Dalmita", "image": "dalmita.jpg", "sex": "Hembra"},
+    {"slug": "galan", "name": "Galán", "image": "galan.jpg", "sex": "Macho"},
+    {"slug": "hershey", "name": "Hershey", "image": "hershey.jpg", "sex": "Hembra"},
+    {"slug": "jazmin", "name": "Jazmín", "image": "jazmin.jpg", "sex": "Hembra"},
 ]
 
 TEMPLATE = """<!DOCTYPE html>
@@ -158,19 +80,18 @@ TEMPLATE = """<!DOCTYPE html>
         <a href="../adoptar.html" class="back-link">← Volver a adoptar</a>
         <div class="rabbit-profile-grid">
           <div class="rabbit-profile-photo">
-            {status_tag}
+            <span class="tag tag-green">Listo para adopción</span>
             <img src="../images/{image}" alt="{name}">
           </div>
           <div class="rabbit-profile-info">
             <h1>{name}</h1>
             <ul class="rabbit-facts">
-              <li><strong>Edad:</strong> {age}</li>
+              <li><strong>Edad:</strong> 1 año</li>
               <li><strong>Sexo:</strong> {sex}</li>
-              <li><strong>Esterilización:</strong> {sterilized}</li>
-              {breed_li}
+              <li><strong>Esterilización:</strong> {steril}</li>
             </ul>
-            <h2>Temperamento</h2>
-            <p>{temperament}</p>
+            <h2>Descripción</h2>
+            <p>{description}</p>
           </div>
         </div>
 
@@ -215,22 +136,19 @@ SOCIAL = """
 out = Path(__file__).resolve().parent.parent / "conejos"
 out.mkdir(exist_ok=True)
 
+# Remove old profile pages
+for old in out.glob("*.html"):
+    old.unlink()
+
 for r in RABBITS:
-    tag = (
-        f'<span class="tag tag-green">{r["status"]}</span>'
-        if r.get("ready")
-        else f'<span class="tag tag-pink-status">{r["status"]}</span>'
-    )
-    breed_li = (
-        f'<li><strong>Raza:</strong> {r["breed"]}</li>' if r.get("breed") else ""
-    )
+    steril = "Esterilizada" if r["sex"] == "Hembra" else "Esterilizado"
     html = TEMPLATE.format(
         **r,
         social=SOCIAL,
         requirements=REQUIREMENTS,
         form=FORM,
-        status_tag=tag,
-        breed_li=breed_li,
+        description=GENERIC_DESCRIPTION,
+        steril=steril,
     )
     (out / f"{r['slug']}.html").write_text(html, encoding="utf-8")
     print("wrote", r["slug"])
